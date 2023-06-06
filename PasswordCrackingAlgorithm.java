@@ -1,0 +1,4 @@
+interface PasswordCrackingAlgorithm {
+    void crackPassword();
+}
+    
