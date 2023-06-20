@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,21 +19,53 @@
   <form id="passwordForm">
     <label for="passwordInput">Mot de passe :</label>
     <input type="password" id="passwordInput" placeholder="Entrez votre mot de passe">
-    <button type="button" onclick="verifyPassword()">Vérifier</button>
+    <button type="button" onclick="runBruteForceAttack()">Vérifier</button>
   </form>
   <div class="message" id="message"></div>
 
   <script>
-    function verifyPassword() {
-      var expectedPassword = "passer"; // Mot de passe attendu
+    function runBruteForceAttack() {
+      var targetPassword = "passer";
       var passwordInput = document.getElementById("passwordInput");
       var password = passwordInput.value;
       var messageElement = document.getElementById("message");
 
-      if (password === expectedPassword) {
+      if (password === targetPassword) {
         showMessage("Authentification réussie.", "success");
       } else {
         showMessage("Erreur d'authentification", "error");
+        startBruteForceAttack();
+      }
+    }
+
+    function startBruteForceAttack() {
+      var targetPassword = "passer";
+      var messageElement = document.getElementById("message");
+
+      var CHARACTER_SET = "abcdefghijklmnopqrstuvwxyz0123456789";
+      var PASSWORD_LENGTH = 6;
+
+      var startTime = new Date().getTime();
+
+      for (var length = 1; length <= PASSWORD_LENGTH; length++) {
+        generatePasswords("", length);
+      }
+
+      function generatePasswords(currentPassword, length) {
+        if (currentPassword.length === length) {
+          if (currentPassword === targetPassword) {
+            var endTime = new Date().getTime();
+            var duration = endTime - startTime;
+            showMessage("Mot de passe trouvé : " + currentPassword + "<br>Temps écoulé : " + duration + " millisecondes", "success");
+            throw new Error("Mot de passe trouvé");
+          }
+          return;
+        }
+
+        for (var i = 0; i < CHARACTER_SET.length; i++) {
+          var c = CHARACTER_SET.charAt(i);
+          generatePasswords(currentPassword + c, length);
+        }
       }
     }
 
@@ -44,78 +75,11 @@
       // Supprimer le message précédent
       messageElement.innerHTML = "";
 
-      var expectedPassword = "passer"; // Mot de passe attendu
-      var passwordInput = document.getElementById("passwordInput");
-      var password = passwordInput.value;
-
-      if (password === expectedPassword) {
-        var message = document.createElement("p");
-        message.textContent = text;
-        message.className = className;
-        messageElement.appendChild(message);
-      }
+      var message = document.createElement("p");
+      message.innerHTML = text;
+      message.className = className;
+      messageElement.appendChild(message);
     }
   </script>
 </body>
 </html>
-=======
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Vérification du mot de passe</title>
-  <style>
-    .message {
-      margin-top: 10px;
-    }
-    .success {
-      color: green;
-    }
-    .error {
-      color: red;
-    }
-  </style>
-</head>
-<body>
-  <h1>Vérification du mot de passe</h1>
-  <form id="passwordForm">
-    <label for="passwordInput">Mot de passe :</label>
-    <input type="password" id="passwordInput" placeholder="Entrez votre mot de passe">
-    <button type="button" onclick="verifyPassword()">Vérifier</button>
-  </form>
-  <div class="message" id="message"></div>
-
-  <script>
-    function verifyPassword() {
-      var expectedPassword = "passer"; // Mot de passe attendu
-      var passwordInput = document.getElementById("passwordInput");
-      var password = passwordInput.value;
-      var messageElement = document.getElementById("message");
-
-      if (password === expectedPassword) {
-        showMessage("Authentification réussie.", "success");
-      } else {
-        showMessage("Erreur d'authentification", "error");
-      }
-    }
-
-    function showMessage(text, className) {
-      var messageElement = document.getElementById("message");
-
-      // Supprimer le message précédent
-      messageElement.innerHTML = "";
-
-      var expectedPassword = "passer"; // Mot de passe attendu
-      var passwordInput = document.getElementById("passwordInput");
-      var password = passwordInput.value;
-
-      if (password === expectedPassword) {
-        var message = document.createElement("p");
-        message.textContent = text;
-        message.className = className;
-        messageElement.appendChild(message);
-      }
-    }
-  </script>
-</body>
-</html>
->>>>>>> 1c14aa8 ('ajout_des_fichiers_au_dépôt')

