@@ -43,20 +43,20 @@
       var messageElement = document.getElementById("message");
 
       var CHARACTER_SET = "abcdefghijklmnopqrstuvwxyz0123456789";
-      var PASSWORD_LENGTH = 6;
+      var longueur_mot_de_passe = 6;
 
-      var startTime = new Date().getTime();
+      var temps_debut = new Date().getTime();
 
-      for (var length = 1; length <= PASSWORD_LENGTH; length++) {
+      for (var length = 1; length <= longueur_mot_de_passe; length++) {
         generatePasswords("", length);
       }
 
-      function generatePasswords(currentPassword, length) {
-        if (currentPassword.length === length) {
-          if (currentPassword === targetPassword) {
-            var endTime = new Date().getTime();
-            var duration = endTime - startTime;
-            showMessage("Mot de passe trouvé : " + currentPassword + "<br>Temps écoulé : " + duration + " millisecondes", "success");
+      function generatePasswords(mot_de_passe_actuel, length) {
+        if (mot_de_passe_actuel.length === length) {
+          if (mot_de_passe_actuel === targetPassword) {
+            var temps_fin = new Date().getTime();
+            var temps_mis = temps_fin - temps_debut;
+            showMessage("Mot de passe trouvé : " + mot_de_passe_actuel + "<br>Temps écoulé : " + temps_mis + " millisecondes", "success");
             throw new Error("Mot de passe trouvé");
           }
           return;
@@ -64,7 +64,7 @@
 
         for (var i = 0; i < CHARACTER_SET.length; i++) {
           var c = CHARACTER_SET.charAt(i);
-          generatePasswords(currentPassword + c, length);
+          generatePasswords(mot_de_passe_actuel + c, length);
         }
       }
     }

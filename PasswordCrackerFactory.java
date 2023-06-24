@@ -3,7 +3,7 @@ class PasswordCrackerFactory {
         if (algorithmType.equalsIgnoreCase("bruteforce")) {
             return new BruteForceCracker(password, hash, estUnHash);
         } else  if (algorithmType.equalsIgnoreCase("dictionary")) {
-            return new DictionaryCracker( chemin, password, estUnHash);
+            return new DictionaryCracker(chemin, password, estUnHash);
         } else  {
             throw new IllegalArgumentException("Algorithme non pris en charge : " + algorithmType);
         }

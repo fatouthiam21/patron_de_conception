@@ -44,18 +44,18 @@ public class PasswordCracker {
                         algorithm = factory.createAlgorithm("bruteforce", password, hash ,"", true);
                     } 
             } else if (algorithmChoice == 2) {
-                String chemin = "Classeur1.csv";
+                String chemin = "C:\\Users/dell/Documents/DIC1/Classeur1.csv";
                 algorithm = factory.createAlgorithm("dictionary", password, chemin, "",true);
             } else {
                 System.out.println("Algorithme de cassage non valide.");
                 return;
             }
             
-            long startTime = System.currentTimeMillis();
+            long temps_debut = System.currentTimeMillis();
             algorithm.crackPassword();
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-            System.out.println("Temps écoulé : " + duration + " millisecondes");
+            long temps_fin = System.currentTimeMillis();
+            long temps_mis = temps_fin - temps_debut;
+            System.out.println("Temps écoulé : " + temps_mis + " millisecondes");
         }
     }
 
@@ -78,7 +78,7 @@ public class PasswordCracker {
     }
  
     private static String getPasswordFromHash(String hash) {
-        String chemin = "C:\\xampp\\htdocs\\tp2Copie\\patron_de_conception\\Classeur1.csv";
+        String chemin = "C:\\Users/dell/Documents/DIC1/Classeur1.csv";
         try (BufferedReader reader = new BufferedReader(new FileReader(chemin))) {
             String line;
             while ((line = reader.readLine()) != null) {

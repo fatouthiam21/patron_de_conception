@@ -13,7 +13,7 @@ public class Exercice {
     }
 
     public static void runBruteForceAttack() {
-        String url = "http://localhost/tp2Copie/motDePasse.html";
+        String url = "http://localhost/tp2Copie/patron_de_conception/motDePasse.html";
         String expectedPassword = "passer";
 
         BruteForceCracker cracker = new BruteForceCracker(url, expectedPassword);
@@ -25,43 +25,44 @@ class BruteForceCracker {
     private static final String CHARACTER_SET = "abcdefghijklmnopqrstuvwxyz0123456789";
     private String url;
     private String expectedPassword;
-    private boolean passwordFound;
+    private boolean mot_de_passe_trouve;
 
     public BruteForceCracker(String url, String expectedPassword) {
         this.url = url;
         this.expectedPassword = expectedPassword;
-        this.passwordFound = false;
+        this.mot_de_passe_trouve = false;
     }
 
     public void crackPassword() {
-        long startTime = System.currentTimeMillis();
+        long temps_debut = System.currentTimeMillis();
 
-        while (!passwordFound) {
+        while (!mot_de_passe_trouve) {
             for (int length = 1; length <= expectedPassword.length(); length++) {
                 generatePasswords("", length);
             }
         }
 
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
+        long temps_fin = System.currentTimeMillis();
+        long elapsedTime = temps_fin - temps_debut;
         System.out.println("Mot de passe trouvé : " + expectedPassword);
         System.out.println("Temps écoulé : " + elapsedTime + " millisecondes");
     }
 
-    private void generatePasswords(String currentPassword, int length) {
-        if (passwordFound) {
+        private void generatePasswords(String mot_de_passe_actuel, int length) {
+        if (mot_de_passe_trouve) {
             return;
         }
 
-        if (currentPassword.length() == length) {
-            if (sendRequest(currentPassword)) {
-                passwordFound = true;
+        if (mot_de_passe_actuel.length() == length) {
+            if (sendRequest(mot_de_passe_actuel)) {
+                mot_de_passe_trouve = true;
+                //return;
             }
         }
 
         for (int i = 0; i < CHARACTER_SET.length(); i++) {
             char c = CHARACTER_SET.charAt(i);
-            generatePasswords(currentPassword + c, length);
+            generatePasswords(mot_de_passe_actuel + c, length);
         }
     }
 
