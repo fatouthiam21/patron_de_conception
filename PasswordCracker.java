@@ -26,7 +26,8 @@ public class PasswordCracker {
                 scanner.nextLine();
                 System.out.println("Entrez le hash du mot de passe :");
                      hash = scanner.nextLine();
-                password = getPasswordFromHash(hash);
+               // password = getPasswordFromHash(hash);
+                password = hash;
             } else {
                 System.out.println("Méthode de cassage non valide.");
                 return;
@@ -45,7 +46,8 @@ public class PasswordCracker {
                     } 
             } else if (algorithmChoice == 2) {
                 String chemin = "C:\\xampp\\htdocs\\tp2Copie\\patron_de_conception\\Classeur1.csv";
-                algorithm = factory.createAlgorithm("dictionary", password, chemin, "",true);
+                boolean estUnHash = password.matches("[0-9a-fA-F]+");
+                algorithm = factory.createAlgorithm("dictionary", password, "", chemin,estUnHash);
             } else {
                 System.out.println("Algorithme de cassage non valide.");
                 return;
